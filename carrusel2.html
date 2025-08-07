@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para Ella</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --fondo: #581F66;
+      --acento: #b19cd9;
+      --texto: #ffffff;
+      --gris: #b3b3b3;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--fondo);
+      font-family: 'Poppins', sans-serif;
+      color: var(--texto);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .player {
+      width: 90%;
+      max-width: 400px;
+      background-color: #1c1c1c;
+      border-radius: 25px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      padding-bottom: 20px;
+    }
+
+    .cover {
+      width: 100%;
+      height: 300px;
+      background-color: #581F66;
+    }
+
+    .cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .info {
+      padding: 20px 10px 10px;
+    }
+
+    .song {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .artist {
+      font-size: 13px;
+      color: var(--gris);
+      margin-top: 4px;
+    }
+
+    .dedicatoria {
+      font-size: 12px;
+      color: #d1b3e0;
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 15px 0;
+      gap: 20px;
+    }
+
+    .controls button {
+      background: none;
+      border: none;
+      color: var(--texto);
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .progress {
+      width: 80%;
+      margin: 0 auto 10px;
+    }
+
+    .progress input[type="range"] {
+      width: 100%;
+      accent-color: var(--acento);
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 30px;
+    }
+
+    .nav-buttons button {
+      background-color: var(--acento);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="player">
+    <div class="cover">
+      <img id="coverImg" src="public\Foto6.jpg" alt="Carátula">
+    </div>
+    <div class="info">
+      <div class="song" id="songTitle">Tu risa, mi lugar favorito.</div>
+      <div class="artist">Porque solo somos simples corazones</div>
+      <p class="dedicatoria">Para ti, Katty</p>
+    </div>
+
+    <div class="progress">
+      <input type="range" value="0" id="progressBar">
+    </div>
+
+    <div class="controls">
+      <button onclick="prevPhoto()">⏮️</button>
+      <button onclick="togglePlay()" id="playBtn">▶️</button>
+      <button onclick="nextPhoto()">⏭️</button>
+    </div>
+
+    <div class="nav-buttons">
+      <button onclick="prevPhoto()">Anterior</button>
+      <button onclick="nextPhoto()">Siguiente</button>
+    </div>
+
+    <audio id="music" preload="auto">
+      <source src="music\Simples Corazones - Fonseca (Letra).mp3" type="audio/mp3">
+    </audio>
+  </div>
+
+  <script>
+    const photos = [
+      { src: 'public/Foto6.jpg', caption: 'Tu risa, mi lugar favorito.' },
+      { src: 'public/Foto7.jpg', caption: 'Contigo, todo tiene sentido.' },
+      { src: 'public/Foto8.jpg', caption: 'Eres mi caos favorito.' },
+      { src: 'public/Foto9.jpg', caption: 'Un instante contigo, vale mil.' },
+      { src: 'public/Foto10.jpg', caption: 'Tu cariño, mi refugio.' },
+      { src: 'public/Foto11.jpg', caption: 'Qué suerte coincidir contigo.' },
+      { src: 'public/Foto12.jpg', caption: 'Todo vale la pena porque eres tú.' }
+    ];
+
+    let current = 0;
+    const img = document.getElementById('coverImg');
+    const songTitle = document.getElementById('songTitle');
+    const music = document.getElementById('music');
+    const playBtn = document.getElementById('playBtn');
+    const progressBar = document.getElementById('progressBar');
+
+    function updatePhoto() {
+      img.src = photos[current].src;
+      songTitle.textContent = photos[current].caption;
+    }
+
+    function nextPhoto() {
+      current = (current + 1) % photos.length;
+      updatePhoto();
+    }
+
+    function prevPhoto() {
+      current = (current - 1 + photos.length) % photos.length;
+      updatePhoto();
+    }
+
+    function togglePlay() {
+      if (music.paused) {
+        music.play();
+        playBtn.textContent = '⏸️';
+      } else {
+        music.pause();
+        playBtn.textContent = '▶️';
+      }
+    }
+
+    music.addEventListener('timeupdate', () => {
+      progressBar.value = (music.currentTime / music.duration) * 100;
+    });
+
+    progressBar.addEventListener('input', () => {
+      music.currentTime = (progressBar.value / 100) * music.duration;
+    });
+  </script>
+</body>
+</html>
